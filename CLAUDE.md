@@ -75,6 +75,26 @@ This project is a **Cyber Security engineering assistant** built on Claude Code'
 - `/jwt:verify <token> <secret|--key file|--jwks url>` — Verify JWT signature
 - `/jwt:inspect <token>` — Full security inspection (decode + expiry + vulnerability checks)
 
+### Windows Basic (`/win:*`)
+- `/win:sysinfo [--remote hostname]` — System information, OS version, domain membership, uptime
+- `/win:users [username] [--admins|--stale]` — User and group enumeration, password policy
+- `/win:network [--connections|--listening|--dns]` — Network config, active connections, listening ports
+- `/win:services [--running|--vulnerable]` — Windows services audit, unquoted paths, non-default accounts
+- `/win:firewall [--rules|--permissive]` — Windows Firewall status, profiles, and rule review
+- `/win:software [--updates|--features]` — Installed software inventory, hotfixes, enabled features
+- `/win:processes [--unsigned|--network|--suspicious]` — Running process analysis, signature checks
+- `/win:tasks [--non-microsoft|--system|--recent]` — Scheduled tasks review for persistence
+
+### Windows Advanced (`/win-adv:*`)
+- `/win-adv:ad-enum [--users|--groups|--kerberoast|--asrep|--delegation]` — Active Directory enumeration
+- `/win-adv:gpo [name] [--password|--audit]` — Group Policy analysis and security review
+- `/win-adv:eventlog [--logons|--admin|--persistence|--brute-force]` — Security event log forensics
+- `/win-adv:registry [--autorun|--security]` — Registry security audit (persistence, UAC, LSA, RDP)
+- `/win-adv:defender [--exclusions|--threats|--asr]` — Windows Defender config and threat detections
+- `/win-adv:audit-policy [--baseline|--powershell]` — Audit policy review vs security baselines
+- `/win-adv:privesc [--services|--tokens|--paths|--creds]` — Privilege escalation vector checks
+- `/win-adv:credentials [--lsa|--ntlm|--cached|--guard]` — Credential store, LSA protection, Credential Guard
+
 ### Git Operations (`/git-ops:*`)
 - `/git-ops:doctor [symptom]` — Diagnose and fix common git repo issues (detached HEAD, diverged branches, stale state)
 - `/git-ops:conflict [file] [--abort|--theirs|--ours]` — Resolve merge/rebase/cherry-pick conflicts
