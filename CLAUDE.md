@@ -75,6 +75,15 @@ This project is a **Cyber Security engineering assistant** built on Claude Code'
 - `/jwt:verify <token> <secret|--key file|--jwks url>` — Verify JWT signature
 - `/jwt:inspect <token>` — Full security inspection (decode + expiry + vulnerability checks)
 
+### Git Operations (`/git-ops:*`)
+- `/git-ops:doctor [symptom]` — Diagnose and fix common git repo issues (detached HEAD, diverged branches, stale state)
+- `/git-ops:conflict [file] [--abort|--theirs|--ours]` — Resolve merge/rebase/cherry-pick conflicts
+- `/git-ops:undo <operation>` — Safely undo the last commit, merge, rebase, push, or stage
+- `/git-ops:rebase-guide <target>` — Interactive rebase walkthrough with squash, reorder, reword
+- `/git-ops:sync [branch] [--rebase|--merge]` — Sync with upstream using the right strategy (rebase vs merge)
+- `/git-ops:cleanup [branches|remote|gc|all]` — Clean up merged branches, stale refs, and repo bloat
+- `/git-ops:reflog-recover [branch|commit|stash|reset]` — Recover lost commits, branches, or stashes from reflog
+
 ## Principles
 
 1. **Always show commands before running them.** The user should see exactly what will execute.
