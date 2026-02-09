@@ -95,6 +95,30 @@ This project is a **Cyber Security engineering assistant** built on Claude Code'
 - `/win-adv:privesc [--services|--tokens|--paths|--creds]` — Privilege escalation vector checks
 - `/win-adv:credentials [--lsa|--ntlm|--cached|--guard]` — Credential store, LSA protection, Credential Guard
 
+### Linux Administration (`/linux:*`)
+- `/linux:disk [--usage|--lvm|--mounts|--large]` — Disk/storage management, LVM, fstab, RAID
+- `/linux:packages <operation>` — Package management (apt/dnf/yum), security updates, history
+- `/linux:users [list|add|lock|sudoers|audit]` — User/group management, sudoers, password policy
+- `/linux:systemd [status|logs|failed|timers|create]` — Systemd services, timers, journalctl, unit files
+- `/linux:processes [--top|--tree|--zombie|--kill]` — Process management, resource usage, kill operations
+- `/linux:permissions [check|audit|acl|fix]` — File permissions, ACLs, umask, SUID/SGID audit
+- `/linux:performance [--cpu|--memory|--disk|--network|--sysctl]` — Performance monitoring and kernel tuning
+- `/linux:boot [--grub|--kernel|--modules|--targets]` — Boot process, GRUB, initramfs, kernel modules
+
+### Web Server Administration (`/webserver:*`)
+- `/webserver:nginx [status|vhost|ssl|test|logs]` — nginx configuration, server blocks, and management
+- `/webserver:apache [status|vhost|ssl|modules|test]` — Apache/httpd configuration and management
+- `/webserver:reverse-proxy <server> <domain> <backend>` — Reverse proxy and load balancing setup
+- `/webserver:ssl-deploy <method> <domain>` — SSL/TLS cert deployment with certbot/ACME and auto-renewal
+- `/webserver:troubleshoot [502|504|403|ssl|slow|down]` — Web server diagnostics and common error resolution
+
+### Database Administration (`/db:*`)
+- `/db:postgres [status|databases|config|connections|locks]` — PostgreSQL administration and monitoring
+- `/db:mysql [status|databases|config|connections|innodb]` — MySQL/MariaDB administration and monitoring
+- `/db:backup <engine> <operation> <database>` — Database backup and restore (pg_dump, mysqldump, automation)
+- `/db:performance [explain|slow|indexes|missing|tune]` — Query performance analysis, EXPLAIN plans, indexing
+- `/db:users [list|create|readonly|audit|revoke]` — Database user/privilege management and security audit
+
 ### Git Operations (`/git-ops:*`)
 - `/git-ops:doctor [symptom]` — Diagnose and fix common git repo issues (detached HEAD, diverged branches, stale state)
 - `/git-ops:conflict [file] [--abort|--theirs|--ours]` — Resolve merge/rebase/cherry-pick conflicts
