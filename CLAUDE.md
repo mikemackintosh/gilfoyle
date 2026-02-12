@@ -59,6 +59,7 @@ This project is a **Cyber Security engineering assistant** built on Claude Code'
 
 ### DNS & Email Security (`/email:*`)
 - `/email:spf-check <domain>` — Analyse SPF record
+- `/email:spf-macro <domain|"spf_record"> [--test --ip x --sender x --helo x]` — Parse, explain, and test-expand SPF macros
 - `/email:dkim-check <domain> [selector]` — Look up DKIM records
 - `/email:dmarc-check <domain>` — Analyse DMARC policy
 - `/email:domain-audit <domain>` — Full email security audit (SPF+DKIM+DMARC+MX+CAA+MTA-STS)

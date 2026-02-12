@@ -114,6 +114,71 @@ v=spf1 -all
 
 > **Limit:** SPF records must not exceed 10 DNS lookups (include, a, mx, redirect each count). Exceeding this causes a `permerror`.
 
+### SPF Macros (RFC 7208 Section 7)
+
+SPF macros allow dynamic construction of DNS names during evaluation. They appear as `%{x}` sequences inside mechanisms and modifiers.
+
+#### Macro Letters
+
+| Letter | Name | Description | Example Value |
+|--------|------|-------------|---------------|
+| `s` | sender | Full envelope-from address | `user@example.com` |
+| `l` | local-part | Local-part of envelope-from | `user` |
+| `o` | domain | Domain part of envelope-from | `example.com` |
+| `d` | current domain | Domain currently being evaluated (follows `include:`/`redirect=`) | `example.com` |
+| `i` | IP | Connecting client IP | `203.0.113.10` or `2001:db8::1` |
+| `p` | PTR domain | Validated reverse DNS of client IP | `mail.example.com` |
+| `v` | IP version string | `in-addr` for IPv4, `ip6` for IPv6 | `in-addr` |
+| `h` | HELO/EHLO | HELO domain from SMTP session | `mail.example.com` |
+| `c` | SMTP client IP | Same as `i` (only in `exp=` strings) | `203.0.113.10` |
+| `r` | receiving host | Receiving MTA domain (only in `exp=` strings) | `mx.receiver.com` |
+| `t` | timestamp | Unix timestamp (only in `exp=` strings) | `1700000000` |
+
+#### Transformers
+
+Transformers modify the macro output. They appear between the letter and the closing brace.
+
+| Transformer | Syntax | Effect | Example |
+|-------------|--------|--------|---------|
+| Reverse | `r` | Reverse dot-separated parts | `%{ir}` on `203.0.113.10` → `10.113.0.203` |
+| Truncate | *N* (digits) | Keep rightmost N parts | `%{i2}` on `203.0.113.10` → `113.10` |
+| Reverse + truncate | *N*`r` | Reverse, then keep rightmost N | `%{ir2}` on `203.0.113.10` → `0.203` |
+| Delimiter | char after all else | Split on this instead of `.` | `%{l-}` splits local-part on `-` |
+
+Full syntax: `%{` *letter* [*digits*] [`r`] [*delimiters*] `}`
+
+#### Common Macro Patterns
+
+```dns
+; Per-IP allowlist via exists (counts as 1 DNS lookup regardless of IP count)
+v=spf1 exists:%{i}._spf.example.com -all
+; → Looks up A record for 203.0.113.10._spf.example.com
+
+; DNSBL-style reverse-IP lookup
+v=spf1 include:%{ir}.%{v}._spf.example.com -all
+; → Evaluates SPF at 10.113.0.203.in-addr._spf.example.com
+
+; Per-user SPF policy
+v=spf1 exists:%{l}._spf.%{d} -all
+; → Looks up A record for user._spf.example.com
+
+; Centralised SPF via redirect
+v=spf1 redirect=%{d}._spf.hosting.com
+; → Redirects evaluation to example.com._spf.hosting.com
+
+; Custom rejection message with macros in exp=
+v=spf1 ... -all exp=explain.%{d}
+; TXT at explain.example.com might contain:
+; "Mail from %{d} is not allowed from %{i}. See https://example.com/spf"
+```
+
+#### Macro Warnings
+
+- **`%{p}` is discouraged.** RFC 7208 says `SHOULD NOT` use it. It forces a PTR lookup on every SPF check — slow, unreliable, and the result is controlled by whoever owns the IP's reverse zone.
+- **`%{c}`, `%{r}`, `%{t}` are `exp=` only.** Using them in mechanisms is invalid.
+- **Sender-controlled input.** Macros like `%{s}`, `%{l}`, and `%{h}` expand values the sender controls. This means the sender can trigger DNS lookups to arbitrary names. This is by design, but be aware of information leakage via DNS.
+- **`exists:` with macros** sidesteps the 10-lookup limit (one `exists:` = one lookup). This is the main reason macros exist in large-scale SPF deployments. The trade-off is readability and debuggability.
+
 ## DKIM (DomainKeys Identified Mail)
 
 DKIM adds a digital signature to outgoing email, verified via a DNS public key.
