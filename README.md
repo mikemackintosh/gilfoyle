@@ -1,4 +1,4 @@
-# SecEng 101
+# Gilfoyle - Security Helper
 
 A security engineering toolkit built on [Claude Code](https://docs.anthropic.com/en/docs/claude-code). It packages roughly 100 slash commands and 30 skills into a single assistant that handles the stuff security engineers actually do day-to-day -- TLS debugging, log analysis, incident response, hardening audits, and everything in between.
 
